@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>WebSocket Snooker Counter</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+        <link rel="stylesheet" href="/static/app.css" />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://unpkg.com/vue@next"></script>
+    </head>
+    <body>
+        <div class="container" id="snooker-score-keeper">
+            <div class="row">
+                <h4 class="center-align">Ш&С™ снукер</h4>
+                <span style="display: none">Your ID: <span>{{ clientId }}</span></span>
+            </div>
+            <div class="row">
+                <table class="striped">
+                    <thead>
+                      <tr>
+                          <th>Имя</th>
+                          <th class="center-align">Очков</th>
+                          <th class="center-align">Серия</th>
+                          <th class="center-align">Макс. серия</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="player in players">
+                          <td>
+                            <label>
+                                <input :checked="player.id == currentPlayerId" type="radio" name="player" :value="player.id">
+                                <span class="player-name">{{ player.name }}</span>
+                            </label>
+                          </td>
+                          <td class="center-align player-points">{{ player.points }}</td>
+                          <td class="center-align">{{ player.current_break }}</td>
+                          <td class="center-align">{{ player.max_break }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row center-align">
+                <button v-for="btn in countButtons" :disabled="btn.disabled" class="btn evt-btn" :class="btn.style" v-on:click="onUiEvent(btn.action, btn.value)">{{ btn.label }}</button>
+            </div>
+            <div class="row right-align foul-mode">
+                <div class="switch">
+                    <label>
+                        <span v-if="players.length > 2">Вычесть</span>
+                        <span v-else>Фол</span>
+
+                        <input type="checkbox" v-model="foulMode" />
+                        <span class="lever"></span>
+                    </label>
+                  </div>
+            </div>
+            <div class="row center-align">
+                <button v-for="btn in bottomButtons" class="btn evt-btn" :disabled="btn.disabled" class="btn evt-btn" :class="btn.style"  v-on:click="onUiEvent(btn.action)" v-html="btn.label"></button>
+            </div>
+        </div>
+        <script src="/static/app.js"></script>
+    </body>
+</html>

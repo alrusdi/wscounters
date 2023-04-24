@@ -1,0 +1,45 @@
+.player-name, .player-points {
+    color: #0000008f;
+    font-size: 17px !important;
+    font-weight: bold;
+    line-height: 23px !important;
+}
+
+.foul-mode {
+    margin-right: 15%;
+}
+
+.evt-btn {
+    margin-right: 5px;
+    color: #000000bd;
+    font-weight: bold;
+}
+
+.evt-btn-yellow {
+    background-color: rgb(255, 255, 0, 0.45);
+}
+
+.evt-btn-red {
+    background-color: rgb(255, 0, 0, 0.45); 
+}
+
+.evt-btn-green {
+    background-color: rgb(0, 255, 0, 0.45);
+}
+
+.evt-btn-brown {
+    background-color: rgb(165, 42, 42, 0.45);
+}
+
+.evt-btn-blue {
+    background-color: rgb(0, 0, 255, 0.75);
+}
+
+.evt-btn-pink {
+    background-color: pink;
+}
+
+.evt-btn-black {
+    background-color: black;
+    color: #666;
+}

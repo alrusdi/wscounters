@@ -1,0 +1,24 @@
+{
+    "id": "113d99eb-7775-4062-9693-53780f130ef3",
+    "events": [
+        {
+            "game_id": "113d99eb-7775-4062-9693-53780f130ef3",
+            "event_type": "count",
+            "started_at": 1682257005.235157,
+            "value_string": null,
+            "value_integer": 2,
+            "id": "7f8b4b90-2653-437b-b3fd-61ca2db923ce",
+            "player_id": "09eabde7-3a21-43f6-b197-c75452e7c214"
+        },
+        {
+            "game_id": "113d99eb-7775-4062-9693-53780f130ef3",
+            "event_type": "count",
+            "started_at": 1682257080.592464,
+            "value_string": null,
+            "value_integer": 1,
+            "id": "f854df58-c1da-44a6-b176-eaecaf2db0d7",
+            "player_id": "09eabde7-3a21-43f6-b197-c75452e7c214"
+        }
+    ],
+    "players": []
+}
