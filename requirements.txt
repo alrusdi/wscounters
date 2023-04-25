@@ -2,3 +2,4 @@ dataclasses-json==0.5.7
 fastapi==0.95.1
 uvicorn==0.21.1
 websockets==11.0.2
+Jinja2==3.1.2

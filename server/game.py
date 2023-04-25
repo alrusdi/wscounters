@@ -4,6 +4,7 @@ import uuid
 
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
+from server.game_results import GameResults, GameResultsManager
 from server.models.game_event import GameEvent, GameEventTypeEnum
 from server.models.game_request import GameEventRequest
 from server.models.player import Player
@@ -15,6 +16,7 @@ SAVE_GAMES_DIR = 'server/data/games'
 @dataclass
 class Game:
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    is_finished: bool = False
     events: list[GameEvent] = field(default_factory=list)
     players: list[Player] = field(default_factory=list)
     
@@ -31,6 +33,8 @@ class Game:
     
     def calc_players(self) -> dict[str, Player]: 
         results_map: dict[str, Player] = {}
+        foul_counts: dict[str, int] = {}
+        breaks: dict[str, list[int]] = {}
         for ev in self.events:
             if not ev.player_id or not ev.event_type == GameEventTypeEnum.COUNT:
                 continue
@@ -39,23 +43,52 @@ class Game:
                     id=ev.player_id,
                     name='',
                 )
+                foul_counts[ev.player_id] = 0
+                breaks[ev.player_id] = []
             
             results_map[ev.player_id].points += ev.value_integer
+            if ev.is_foul:
+                foul_counts[ev.player_id] += 1
+                
         
         current_break = 0
         current_break_player_id = ''
-        for ev in reversed(self.events):
+        for ev in self.events:
             if ev.event_type != GameEventTypeEnum.COUNT:
-                break
+                if current_break:
+                    breaks[current_break_player_id].append(current_break)
+                current_break = 0
+                continue
             if current_break_player_id and current_break_player_id != ev.player_id:
-                break
+                if current_break:
+                    breaks[current_break_player_id].append(current_break)
+                current_break = 0
             current_break_player_id = ev.player_id
-            if ev.value_integer > 0:
+            if ev.value_integer > 0 and not ev.is_foul:
                 current_break += ev.value_integer
         
         if current_break and current_break_player_id in results_map:
+            breaks[current_break_player_id].append(current_break)
             results_map[current_break_player_id].current_break = current_break
+
+        import json; print(json.dumps(breaks, indent=4, ensure_ascii=False))
+        
+        player_ids = list(results_map.keys())
+        for player_id, player in results_map.items():
+            if len(player_ids) == 2:
+                other_player_id = [pid for pid in player_ids if pid !=player_id][0]
+                results_map[other_player_id].fouls = foul_counts.get(player_id, 0)
+            else:
+                player.fouls = foul_counts.get(player_id, 0)
+
         return results_map
+
+    
+    def get_date(self) -> datetime.datetime:
+        for ev in self.events:
+            if ev.started_at:
+                return ev.started_at
+        return datetime.datetime.now()
 
 
 
@@ -66,12 +99,12 @@ class GameManager:
     async def create_new_game(self) -> Game:
         game = Game()
         await self.save_game(game)
-        self.games[game.id] = game
         return game
     
     async def save_game(self, game: Game) -> None:
-        data_raw = game.to_json()
-        with open(f'{SAVE_GAMES_DIR}/game_{game.id}.json', 'w') as f:
+        self.games[game.id] = game
+        data_raw = game.to_json(ensure_ascii=False, indent=4)
+        with open(f'{SAVE_GAMES_DIR}/game_{game.id}.json', 'w', encoding='utf8') as f:
             f.write(data_raw)
     
     async def get_game(self, game_id: str) -> Game | None:
@@ -84,6 +117,15 @@ class GameManager:
                 game = Game.from_json(raw_game_data)
                 self.games[game_id] = game
                 return game
+    
+    async def is_game_exists(self, game_id: str) -> bool:
+        if game_id in self.games:
+            return True
+        
+        if os.path.exists(f'{SAVE_GAMES_DIR}/game_{game_id}.json'):
+            return True
+        
+        return False
     
     async def push_game_event(self, game: Game, event: GameEventRequest):
         game_event: GameEvent | None = None
@@ -111,3 +153,18 @@ class GameManager:
         
         if save_game:
             await self.save_game(game)
+    
+    async def finalize_game(self, game: Game, game_results_manager: GameResultsManager) -> GameResults:
+        game.is_finished = True
+        await self.save_game(game)
+
+        players = list(sorted(game.calc_players().values(), key=lambda x: x.points, reverse=True))
+
+        game_results = GameResults(
+            game_id=game.id,
+            game_date=game.get_date(),
+            player_stats=players
+        )
+
+        await game_results_manager.save_game_results(game_results)
+        return game_results

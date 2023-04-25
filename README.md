@@ -8,4 +8,3 @@ You will need a python3.10+
 3. Hit `uvicorn main:app --reload`
 4. ...
 5. Profit
-

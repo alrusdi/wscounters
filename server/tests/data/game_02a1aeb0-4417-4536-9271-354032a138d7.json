@@ -1,0 +1,47 @@
+{
+    "id": "02a1aeb0-4417-4536-9271-354032a138d7",
+    "is_finished": false,
+    "events": [
+        {
+            "game_id": "02a1aeb0-4417-4536-9271-354032a138d7",
+            "event_type": "count",
+            "started_at": 1682352641.934078,
+            "value_string": null,
+            "value_integer": 1,
+            "id": "194566a6-c076-4bf8-b997-5bf3dcc116c9",
+            "player_id": "09eabde7-3a21-43f6-b197-c75452e7c214",
+            "is_foul": false
+        },
+        {
+            "game_id": "02a1aeb0-4417-4536-9271-354032a138d7",
+            "event_type": "count",
+            "started_at": 1682352648.907954,
+            "value_string": null,
+            "value_integer": 4,
+            "id": "479ec2e9-242e-4559-9411-e720bf2ad3db",
+            "player_id": "578137b1-b118-4a9d-85b0-b5a108b5e333",
+            "is_foul": true
+        },
+        {
+            "game_id": "02a1aeb0-4417-4536-9271-354032a138d7",
+            "event_type": "count",
+            "started_at": 1682352685.570884,
+            "value_string": null,
+            "value_integer": 1,
+            "id": "f6edeaf7-a210-4afe-9c50-039120b697da",
+            "player_id": "578137b1-b118-4a9d-85b0-b5a108b5e333",
+            "is_foul": false
+        },
+        {
+            "game_id": "02a1aeb0-4417-4536-9271-354032a138d7",
+            "event_type": "count",
+            "started_at": 1682352688.075822,
+            "value_string": null,
+            "value_integer": 2,
+            "id": "80b1d731-e755-45a3-bb7d-b8f146ccad3b",
+            "player_id": "578137b1-b118-4a9d-85b0-b5a108b5e333",
+            "is_foul": false
+        }
+    ],
+    "players": []
+}

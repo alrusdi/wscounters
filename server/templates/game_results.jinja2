@@ -1,0 +1,45 @@
+{% extends 'base.jinja2' %}
+
+{% block title %}Результаты игры{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div id="game-results">
+        <h4 class="center-align">Результаты игры</h4>
+
+        <div class="raw">
+            <dl>
+                <dt>Дата проведения:</dt>
+                <dd>{{ game_results.game_date.strftime('%Y-%m-%d %H:%M') }}</dd>
+            </dl>
+        </div>
+
+        <div class="raw">
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th class="center-align">Очков</th>
+                        <th class="center-align">Фолов</th>
+                        <th class="center-align">Макс. серия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for player in game_results.player_stats %}
+                    <tr>
+                        <td class="player-name">{{ player.name }}</td>
+                        <td class="center-align player-points">{{ player.points }}</td>
+                        <td class="center-align">{{ player.fouls }}</td>
+                        <td class="center-align">{{ player.max_break }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row center-align">
+            <a href="/new-game/" class="btn">Создать новую игру</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

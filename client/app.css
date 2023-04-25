@@ -43,3 +43,29 @@
     background-color: black;
     color: #666;
 }
+
+.new-game-players {
+    margin: 25px 135px;
+}
+
+.new-game-players span {
+    font-size: 20px !important;
+    line-height: 18px !important;
+}
+
+.alert .card-content span {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-right:4px;
+}
+
+.alert .card-content .material-icons {
+    font-size: 1.5em;
+    position: relative;
+    top: 5px;
+    margin-right: 0.5em;
+}
+
+#game-results dt {
+    font-weight: bold;
+}

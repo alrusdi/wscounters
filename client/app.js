@@ -1,11 +1,5 @@
 var ws = null;
 
-const POSSIBLE_PLAYERS = [
-    {'id': '09eabde7-3a21-43f6-b197-c75452e7c214', 'name': 'Саша', 'points': 0, 'current_break': 0, 'max_break': 0},
-    {'id': '1d5dd8e0-b411-43ac-a872-25747fce3c12', 'name': 'Сергей', 'points': 0, 'current_break': 0, 'max_break': 0},
-    {'id': '578137b1-b118-4a9d-85b0-b5a108b5e333', 'name': 'Гузель', 'points': 0, 'current_break': 0, 'max_break': 0},
-]
-
 function sendMessage(msg) {
     const data = {
         "message_type": msg.messageType,
@@ -21,18 +15,24 @@ function sendMessage(msg) {
 }
 
 const SnookerScoreKeeper = {
+    delimiters: ["[[", "]]"],
     mounted () {
         M.AutoInit()
+        M.Sidenav.init(document.querySelectorAll('.sidenav'), {});
     },
     created() {
         const app = this;
         const host = window.location.host.toString();
-        ws = new WebSocket(`ws://${host}/ws/${this.clientId}`);
+        const protocol = window.location.protocol == 'https:' ? 'wss': 'ws'
+        ws = new WebSocket(`${protocol}://${host}/ws/${this.clientId}`);
 
         ws.onmessage = (event) => {
             var results = JSON.parse(event.data)
+            if (results.status != 'players') {
+                console.log(results.message);
+                return
+            }
             players_data_map = results.message
-            console.log('GOT DATA', players_data_map);
             for (player of app.players) {
                 pdata = players_data_map[player.id]
                 if (pdata) {

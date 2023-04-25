@@ -1,0 +1,76 @@
+{% extends 'base.jinja2' %}
+
+{% block title %}Ш&С™ снукер{% endblock %}
+
+{% block content %}
+<div id="snooker-score-keeper">
+    <nav>
+        <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Ш&С™ снукер</a>
+        <a href="#" data-target="mobile-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/new-game/">Новая игра</a></li>
+            <li><a :href="'/game-results/'+gameId">Завершить игру</a></li>
+            <li><a href="http://www.fbsrf.ru/sites/default/files/02-pravila_snukera_2020-na_sayt-01.pdf">Правила</a></li>
+            <li><a href="https://github.com/alrusdi/wscounters">Github</a></li>
+        </ul>
+        </div>
+    </nav>
+    
+    <ul class="sidenav" id="mobile-menu">
+        <li><a href="/new-game/"><i class="material-icons">control_point</i>Новая игра</a></li>
+        <li><a :href="'/game-results/'+gameId"><i class="material-icons">block</i>Завершить игру</a></li>
+        <li><a href="http://www.fbsrf.ru/sites/default/files/02-pravila_snukera_2020-na_sayt-01.pdf" target="_blank"><i class="material-icons">library_books</i>Правила</a></li>
+        <li><a href="https://github.com/alrusdi/wscounters"><i class="material-icons">code</i>Github</a></li>
+    </ul>
+    <div class="container">
+        <div class="row">
+            <span style="display: none">Your ID: <span>[[ clientId ]]</span></span>
+        </div>
+        <div class="row">
+            <table class="striped">
+                <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th class="center-align">Очков</th>
+                    <th class="center-align">Серия</th>
+                    <th class="center-align">Макс. серия</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="player in players">
+                    <td>
+                        <label>
+                            <input :checked="player.id == currentPlayerId" type="radio" name="player" :value="player.id">
+                            <span class="player-name">[[ player.name ]]</span>
+                        </label>
+                    </td>
+                    <td class="center-align player-points">[[ player.points ]]</td>
+                    <td class="center-align">[[ player.current_break ]]</td>
+                    <td class="center-align">[[ player.max_break ]]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row center-align">
+            <button v-for="btn in countButtons" :disabled="btn.disabled" class="btn evt-btn" :class="btn.style" v-on:click="onUiEvent(btn.action, btn.value)">[[ btn.label ]]</button>
+        </div>
+        <div class="row right-align foul-mode">
+            <div class="switch">
+                <label>
+                    <span v-if="players.length > 2">Вычесть</span>
+                    <span v-else>Фол</span>
+
+                    <input type="checkbox" v-model="foulMode" />
+                    <span class="lever"></span>
+                </label>
+            </div>
+        </div>
+        <div class="row center-align">
+            <button v-for="btn in bottomButtons" class="btn evt-btn" :disabled="btn.disabled" class="btn evt-btn" :class="btn.style"  v-on:click="onUiEvent(btn.action)" v-html="btn.label"></button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}<script src="/static/app.js"></script>{% endblock %}

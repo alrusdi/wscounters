@@ -1,4 +1,4 @@
-from dataclasses import dataclass, fields
+from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 
 @dataclass_json
@@ -9,3 +9,4 @@ class Player:
     points: int = 0
     max_break: int = 0
     current_break: int = 0
+    fouls: int = 0

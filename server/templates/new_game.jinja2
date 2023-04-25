@@ -1,0 +1,47 @@
+{% extends 'base.jinja2' %}
+
+{% block title %}Создание новой игры{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div id="new-game-form">
+        <form action="#" method="POST" v-on:submit.prevent="sendForm()">
+
+            <h4  class="center-align">Кто будет играть?</h4>
+
+            <div class="new-game-players">
+                <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" v-model="selectedPlayers" value="09eabde7-3a21-43f6-b197-c75452e7c214" />
+                        <span>Саша</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" v-model="selectedPlayers" value="1d5dd8e0-b411-43ac-a872-25747fce3c12" />
+                        <span>Сергей</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" v-model="selectedPlayers" value="578137b1-b118-4a9d-85b0-b5a108b5e333" />
+                        <span>Гузель</span>
+                    </label>
+                </p>
+            </div>
+            <div v-if="errorMessage">
+                <div class="alert card red lighten-4 red-text text-darken-4">
+                    <div class="card-content">
+                        <p><i class="material-icons">report</i><span>Ошибка:</span>[[ errorMessage ]]</p>
+                    </div>
+                </div>
+            </div>
+            <p class="center-align">
+                <input class="btn" type="submit" value="Создать" />
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}<script src="/static/new_game.js"></script>{% endblock %}
