@@ -1,18 +1,19 @@
 import datetime
 import uuid
-from enum import Enum
 from dataclasses import dataclass, field
+from enum import Enum
+
 from dataclasses_json import dataclass_json
 
 
 class GameEventTypeEnum(Enum):
-    START_GAME = 'start_game'
-    MESSAGE = 'message'
-    COUNT = 'count'
-    ERROR = 'error'
-    UNDO = 'undo'
-    END_BREAK = 'end_break'
-    INIT = 'init'
+    START_GAME = "start_game"
+    MESSAGE = "message"
+    COUNT = "count"
+    ERROR = "error"
+    UNDO = "undo"
+    END_BREAK = "end_break"
+    INIT = "init"
 
 @dataclass_json
 @dataclass
