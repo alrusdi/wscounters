@@ -35,7 +35,8 @@ async def game_results_page(request: Request, game_id:str):
         game = await game_manager.get_game(game_id=game_id)
         if game:
             await game_manager.finalize_game(game, game_results_manager)
-    
+            game_results = await game_results_manager.get_game_results(game_id=game_id)
+
     if not game_results:
         raise HTTPException(status_code=404, detail="Item not found")
     return templates.TemplateResponse("game_results.jinja2", {"request": request, "game_results": game_results})
@@ -61,8 +62,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
                     players_data = game.calc_players()
                     await manager.broadcast(
                         _to_message(jsonable_encoder(players_data), status='players'),
-                        current_websocket=websocket,
                     )
+                    continue
 
             await manager.broadcast(_to_message("Game not found", status='fail'))
     except WebSocketDisconnect:
