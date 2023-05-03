@@ -20,8 +20,12 @@ game_results_manager = GameResultsManager()
 
 app.mount("/static", StaticFiles(directory="client"), name="static")
 
-@app.get("/play/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def main_page(request: Request):
+    return templates.TemplateResponse("index.jinja2", {"request": request})
+
+@app.get("/play/", response_class=HTMLResponse)
+async def play_game_page(request: Request):
     return templates.TemplateResponse("play.jinja2", {"request": request})
 
 @app.get("/new-game/", response_class=HTMLResponse)
