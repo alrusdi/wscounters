@@ -1,10 +1,12 @@
 import datetime
+import json
 import os
 from dataclasses import dataclass
 
 from dataclasses_json import DataClassJsonMixin
 
 from server.models.player import Player
+from server.settings import BASE_DIR
 
 SAVE_GAME_RESULTS_DIR = "server/data/results"
 
@@ -42,6 +44,12 @@ class GameResultsManager:
 
     async def save_game_results(self, game_results: GameResults) -> None:
         self.results[game_results.game_id] = game_results
+        with open(f"{BASE_DIR}/client/common.js", encoding="utf8") as f:
+            raw_data = f.read().replace("const POSSIBLE_PLAYERS = ", "")
+            player_names = {p["id"]: p["name"] for p in json.loads(raw_data)}
+        for pstat in game_results.player_stats:
+            if not pstat.name and pstat.id and pstat.id in player_names:
+                pstat.name = player_names[pstat.id]
         data_raw = game_results.to_json(ensure_ascii=False, indent=4)
         with open(f"{SAVE_GAME_RESULTS_DIR}/result_{game_results.game_id}.json", "w", encoding="utf8") as f:
             f.write(data_raw)

@@ -31,7 +31,8 @@ def new_game_page(request: Request):
 @app.get("/game-results/{game_id}/", response_class=HTMLResponse)
 async def game_results_page(request: Request, game_id:str):
     game_results = await game_results_manager.get_game_results(game_id=game_id)
-    if not game_results and game_manager.is_game_exists(game_id=game_id):
+    is_game_exists = await game_manager.is_game_exists(game_id=game_id)
+    if not game_results and is_game_exists:
         game = await game_manager.get_game(game_id=game_id)
         if game:
             await game_manager.finalize_game(game, game_results_manager)
@@ -79,9 +80,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
 
 def parse_ws_request(data: str) -> GameEventRequest:
     try:
-        print(data)
         req = GameEventRequest.from_json(data)
-        print(req)
         return req
     except:
         import traceback
