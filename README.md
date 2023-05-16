@@ -1,5 +1,5 @@
 # Wscounters
-An approuch to make snooker score application with clints sync by websockets
+An approach to make snooker score application with clients sync by websockets
 
 # How to run
 You will need a python3.10+  
